@@ -139,6 +139,11 @@ Não criar interface administrativa para gerenciar unidades, agendas ou vagas.
 - Credenciais somente por variáveis de ambiente.
 - Usar dados sintéticos e identificar como simuladas disponibilidades e integrações não reais.
 - Priorizar fluxo completo de continuidade do cuidado.
-# Portal do paciente — demonstração local
 
-O portal em `/paciente/login` é uma simulação isolada no navegador: suas opções e registros não são enviados ao backend nem persistidos no MySQL. Ela não substitui a jornada integrada descrita neste documento. A declaração do paciente não confirma clinicamente o atendimento nem libera retorno; a liberação profissional é um dado fictício preexistente.
+## 13. Acesso profissional
+
+O login exige uma conta ativa com perfil PROFESSIONAL e vínculo ativo com uma instituição ativa. O backend revalida essas condições nas APIs protegidas. A sessão é encerrada no logout ou após 30 minutos de inatividade.
+
+O módulo profissional exibe pacientes e atendimentos dos encaminhamentos vinculados às instituições ativas do profissional. Encaminhamentos legados sem instituição ficam fora dessas consultas até receberem um vínculo explícito. O dashboard conta reservas ativas para hoje, registros de comparecimento pendentes até o fim de hoje e faltas registradas no histórico institucional. As datas seguem o horário de São Paulo.
+
+A partir do horário marcado, o profissional pode registrar comparecimento com observações opcionais ou registrar falta. A operação grava autor e horário e atualiza o agendamento e o encaminhamento juntos. A confirmação do exame mantém o retorno bloqueado até a liberação profissional.
