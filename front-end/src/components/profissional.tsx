@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { consultarSessao, enviarAuth } from "@/lib/auth";
+import { apiDemo, demonstracao } from "@/lib/demonstracao";
 
 type Paciente = { id: number; nome: string; telefone: string; ativo: boolean };
 type Atendimento = {
@@ -25,6 +26,7 @@ function horario(data: string) {
 }
 
 async function api<T>(caminho: string, signal?: AbortSignal, corpo?: object): Promise<T> {
+  if (demonstracao) return apiDemo(caminho, corpo) as T;
   const headers: Record<string, string> = {};
   if (corpo) {
     const csrf = await fetch("/api/auth/csrf", { cache: "no-store", signal });
@@ -124,6 +126,7 @@ function Painel({ nome }: { nome: string }) {
   return <>
     <h1 className="text-3xl font-bold">Dashboard</h1>
     <p>Olá, {nome}.</p>
+    {demonstracao && <p className="text-sm">Demonstração · Dados fictícios</p>}
     <Dados resultado={resumo}>{(dados) => <dl className="grid gap-3 sm:grid-cols-3">
       <div className={cartao}><dt>Agendados para hoje</dt><dd className="text-3xl font-bold">{dados.hoje}</dd></div>
       <div className={cartao}><dt>Aguardando confirmação até hoje</dt><dd className="text-3xl font-bold">{dados.pendentes}</dd></div>

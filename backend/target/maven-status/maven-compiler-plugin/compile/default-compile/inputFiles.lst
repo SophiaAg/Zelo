@@ -1,7 +1,15 @@
+C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\autenticacao\AutenticacaoController.java
+C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\autenticacao\AutenticacaoService.java
+C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\autenticacao\ContaRepository.java
+C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\autenticacao\SegurancaConfig.java
+C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\autenticacao\UsuarioDemonstracao.java
 C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\paciente\controller\PacienteController.java
 C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\paciente\dto\PacienteCadastro.java
 C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\paciente\dto\PacienteResposta.java
 C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\paciente\model\Paciente.java
 C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\paciente\repository\PacienteRepository.java
 C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\paciente\service\PacienteService.java
+C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\profissional\AcompanhamentoController.java
+C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\profissional\AcompanhamentoRepository.java
+C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\profissional\AcompanhamentoService.java
 C:\Users\usuario\Documents\GitHub\Zelo\backend\src\main\java\br\com\zelo\ZeloApplication.java
