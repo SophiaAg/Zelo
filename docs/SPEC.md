@@ -139,3 +139,6 @@ Não criar interface administrativa para gerenciar unidades, agendas ou vagas.
 - Credenciais somente por variáveis de ambiente.
 - Usar dados sintéticos e identificar como simuladas disponibilidades e integrações não reais.
 - Priorizar fluxo completo de continuidade do cuidado.
+# Portal do paciente — demonstração local
+
+O portal em `/paciente/login` é uma simulação isolada no navegador: suas opções e registros não são enviados ao backend nem persistidos no MySQL. Ela não substitui a jornada integrada descrita neste documento. A declaração do paciente não confirma clinicamente o atendimento nem libera retorno; a liberação profissional é um dado fictício preexistente.

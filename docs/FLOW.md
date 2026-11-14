@@ -114,3 +114,6 @@ Se o atendimento humano ocorrer durante o fluxo de retorno, retomar o retorno; s
 ## 7. Persistência
 
 O backend registra encaminhamentos, agendamentos e mudanças de situação no MySQL 8.0+. A seleção de uma opção fictícia é validada e persistida pelo backend; o assistente só confirma após a resposta bem-sucedida. O esquema é evoluído por migrations Flyway em `src/main/resources/db/migration/`, e Hibernate valida o esquema. Opções mockadas permanecem configuração de backend, sem tabelas de agenda ou cadastro de unidade.
+## 8. Portal demonstrativo isolado
+
+O portal do paciente simula escolhas e persistência no navegador, sem comunicação com o backend. Um retorno previamente liberado permite demonstrar o agendamento; declarações do paciente permanecem separadas da confirmação e liberação profissionais descritas acima.
