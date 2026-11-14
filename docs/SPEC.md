@@ -134,7 +134,7 @@ Não criar interface administrativa para gerenciar unidades, agendas ou vagas.
 
 ## 12. Restrições técnicas
 
-- Backend Java 21 + Spring Boot; frontend React + TypeScript.
+- Backend Java 17 + Spring Boot; frontend React + TypeScript.
 - Spring Data JPA/Hibernate e JUnit; persistência em MySQL 8.0+.
 - Credenciais somente por variáveis de ambiente.
 - Usar dados sintéticos e identificar como simuladas disponibilidades e integrações não reais.

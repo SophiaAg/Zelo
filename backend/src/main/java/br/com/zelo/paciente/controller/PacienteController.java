@@ -1,4 +1,8 @@
-package br.com.zelo.paciente;
+package br.com.zelo.paciente.controller;
+
+import br.com.zelo.paciente.dto.PacienteCadastro;
+import br.com.zelo.paciente.dto.PacienteResposta;
+import br.com.zelo.paciente.service.PacienteService;
 
 import java.net.URI;
 import org.springframework.dao.DuplicateKeyException;

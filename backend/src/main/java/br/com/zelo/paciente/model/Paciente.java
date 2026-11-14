@@ -1,4 +1,4 @@
-package br.com.zelo.paciente;
+package br.com.zelo.paciente.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-class Paciente {
+public class Paciente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,13 +25,25 @@ class Paciente {
     protected Paciente() {
     }
 
-    Paciente(String nome, String telefone, boolean autorizouContato) {
+    public Paciente(String nome, String telefone, boolean autorizouContato) {
         this.nome = nome;
         this.telefone = telefone;
         this.autorizouContato = autorizouContato;
     }
 
-    PacienteResposta paraResposta() {
-        return new PacienteResposta(id, nome, telefone, autorizouContato);
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public boolean isAutorizouContato() {
+        return autorizouContato;
     }
 }
