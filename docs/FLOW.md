@@ -118,3 +118,7 @@ O backend registra encaminhamentos, agendamentos e mudanças de situação no My
 ## 8. Login profissional
 
 O profissional entra em /login com e-mail e senha. Após validar as credenciais, a conta, o perfil e o vínculo institucional, o backend cria a sessão e o frontend abre /dashboard. Ao recarregar, /api/auth/me revalida o acesso. Quando a sessão expira ou o profissional sai, a rota volta para /login.
+
+## 9. Acompanhamento profissional
+
+No dashboard, o profissional abre um atendimento da agenda ou entra em Pacientes, pesquisa por nome ou ID e abre o histórico. O modal oferece o registro a partir do horário marcado, quando a reserva e o encaminhamento estão agendados. Comparecimento conclui a etapa atual. Falta marca a reserva como AUSENTE e a etapa como NECESSITA_REAGENDAMENTO. Registros finalizados e cancelados permanecem disponíveis para consulta. Após salvar, a tela recarrega os dados e indicadores aplicáveis.

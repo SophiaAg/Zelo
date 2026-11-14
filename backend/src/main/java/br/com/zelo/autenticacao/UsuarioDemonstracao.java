@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.EncodedResource;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,14 +42,18 @@ class UsuarioDemonstracao implements ApplicationRunner {
                 INSERT IGNORE INTO usuario (nome, email, senha_hash, perfil)
                 VALUES ('Profissional de demonstração', ?, ?, 'PROFESSIONAL')
                 """, email, senhas.encode(senha));
-        if (criada == 0) {
-            return;
-        }
-        jdbc.update("INSERT IGNORE INTO instituicao (nome) VALUES ('Instituição demonstrativa Zelo')");
-        jdbc.update("""
+        if (criada > 0) {
+            jdbc.update("INSERT IGNORE INTO instituicao (nome) VALUES ('Instituição demonstrativa Zelo')");
+            jdbc.update("""
                 INSERT INTO vinculo_institucional (usuario_id, instituicao_id)
                 SELECT u.id, i.id FROM usuario u CROSS JOIN instituicao i
                 WHERE u.email = ? AND i.nome = 'Instituição demonstrativa Zelo'
                 """, email);
+        }
+        jdbc.execute((ConnectionCallback<Void>) conexao -> {
+            ScriptUtils.executeSqlScript(conexao,
+                    new EncodedResource(new ClassPathResource("demo/acompanhamento.sql"), StandardCharsets.UTF_8));
+            return null;
+        });
     }
 }

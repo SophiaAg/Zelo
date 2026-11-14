@@ -29,7 +29,9 @@ npm ci
 npm run dev
 ```
 
-Acesse [http://localhost:3000/login](http://localhost:3000/login) e entre com os valores que definiu para a conta demonstrativa. Recarregue o dashboard, clique em **Sair** e tente acessá-lo novamente.
+Acesse [http://localhost:3000/login](http://localhost:3000/login) e entre com a conta demonstrativa. O perfil `demo` inclui dois pacientes sintéticos com atendimentos disponíveis para registro. Abra um atendimento no dashboard, confirme o comparecimento e acompanhe a atualização dos indicadores. Em **Pacientes**, busque outro paciente por nome, abra o histórico e registre a falta. Reabra os detalhes para conferir autoria e situação. Uma reinicialização mantém os registros. Se os casos foram usados em uma demonstração anterior, consulte-os pelo histórico ou inicie a demonstração em outro banco vazio.
+
+As APIs de acompanhamento usam a mesma sessão. Os registros devolvidos são restritos a vínculos institucionais ativos. Encaminhamentos anteriores à V3 exigem atribuição explícita de instituição para aparecer no módulo.
 
 O Next.js encaminha as APIs para `ZELO_API_URL` (padrão `http://localhost:8080`). O navegador usa a origem do frontend para o aplicativo e a API, com cookies de sessão enviados nessa mesma origem.
 
