@@ -1,144 +1,141 @@
 # Zelo — Especificação do MVP
 
-## 1. Visão do produto
+## 1. Visão e problema
 
-Zelo é uma plataforma de continuidade do cuidado que conecta profissionais de saúde e pacientes.
+Zelo demonstra como um assistente pode reduzir a perda de continuidade do cuidado após uma consulta. Pacientes podem esquecer de agendar exames, faltar a atendimentos ou deixar de retornar ao profissional.
 
-Após uma consulta, o profissional registra os exames ou consultas necessários. Um assistente conversacional acompanha o paciente, facilita o agendamento e envia lembretes até a conclusão das pendências.
+O objetivo é acompanhar a pendência do encaminhamento até a conclusão, com apoio de agendamento simplificado, lembretes e assistência humana. Zelo **não é um sistema hospitalar de agendamento**.
 
-## 2. Problema
-
-Pacientes recebem encaminhamentos, mas podem esquecer de agendar exames, faltar aos atendimentos ou não retornar ao profissional após realizá-los.
-
-A equipe de saúde nem sempre possui visibilidade centralizada sobre essas pendências.
-
-## 3. Objetivo do MVP
-
-Demonstrar uma jornada completa:
-
-**Encaminhamento → agendamento → lembretes → comparecimento → retorno → conclusão.**
-
-A solução utiliza uma agenda própria com disponibilidades cadastradas no sistema. Não consulta vagas reais de instituições externas.
-
-## 4. Usuários
+## 2. Usuários
 
 ### Profissional de saúde
 
-- Registra encaminhamentos.
-- Consulta pacientes e suas pendências.
-- Gerencia unidades, procedimentos e disponibilidade da agenda.
-- Confirma comparecimentos ou ausências.
-- Libera o retorno após o exame, quando aplicável.
-- Acompanha solicitações de ajuda humana.
+- Registra encaminhamentos para exames ou consultas e indica se o exame exige retorno.
+- Consulta pendências e confirma comparecimento ou ausência.
+- Após a realização do exame, autoriza a liberação do retorno quando aplicável.
+- Visualiza casos que precisam de assistência humana.
 
 ### Paciente
 
-- Recebe notificações pelo WhatsApp (ou chat demonstrativo).
-- Escolhe horários disponíveis.
-- Interage por texto; áudio é opcional no MVP.
-- Recebe lembretes de agendamento e comparecimento.
-- Agenda retornos indicados pelo profissional.
+- Recebe contato autorizado por WhatsApp ou chat demonstrativo.
+- Solicita opções, escolhe um horário fictício e recebe confirmação do backend.
+- Recebe lembretes e pode pedir ajuda humana.
 
-## 5. Requisitos funcionais
+## 3. Escopo e jornada principal
 
-- **RF-01:** Cadastrar e consultar pacientes fictícios.
-- **RF-02:** Cadastrar unidades, procedimentos e horários disponíveis na agenda.
-- **RF-03:** Permitir ao profissional criar encaminhamentos para exames e consultas.
-- **RF-04:** Permitir criar retorno vinculado a um encaminhamento de exame.
-- **RF-05:** Notificar o paciente quando existir um novo encaminhamento, mediante autorização de contato e regras do canal.
-- **RF-06:** Permitir consultar, escolher e reservar horários disponíveis pelo assistente.
-- **RF-07:** Interpretar mensagens em linguagem natural usando IA.
-- **RF-08:** Registrar e atualizar estados de encaminhamentos e agendamentos.
-- **RF-09:** Programar lembretes e permitir disparo de demonstração sem aguardar as datas reais.
-- **RF-10:** Permitir ao profissional confirmar comparecimento ou ausência.
-- **RF-11:** Disponibilizar agendamento do retorno após confirmação do exame e liberação pelo profissional.
-- **RF-12:** Atualizar o painel conforme os estados se alterarem.
-- **RF-13:** Encaminhar à equipe os casos que precisem de intervenção humana.
+1. Profissional registra um encaminhamento.
+2. Assistente contata o paciente conforme autorização e regras do canal.
+3. Paciente pede opções de horário.
+4. Backend fornece opções fictícias previamente configuradas por tipo de procedimento (por exemplo, hemograma, ultrassonografia e consulta de retorno).
+5. Assistente apresenta somente essas opções.
+6. Paciente escolhe uma opção; backend valida e registra o agendamento no MySQL.
+7. Sistema atualiza a situação do encaminhamento.
+8. Assistente confirma a reserva e acompanha a próxima etapa.
 
-## 6. Regras de negócio
+Os horários são dados de demonstração definidos no backend; não representam disponibilidade real. O agendamento e as mudanças de estado são persistidos. A unidade pode ser um nome fictício apresentado junto ao horário. Não é necessário cadastrar ou administrar unidades.
+
+## 4. Requisitos funcionais
+
+- **RF-01:** Manter pacientes fictícios com nome, telefone e autorização de contato.
+- **RF-02:** Permitir ao profissional registrar encaminhamento de exame ou consulta.
+- **RF-03:** Oferecer opções fictícias configuradas no backend por procedimento; a IA não pode inventar opções.
+- **RF-04:** Validar a escolha e persistir o agendamento e as mudanças de situação no MySQL.
+- **RF-05:** Interpretar mensagens em linguagem natural para identificar intenção/preferências, esclarecer ambiguidades e encaminhar pedidos de ajuda; validar toda ação no backend.
+- **RF-06:** Enviar ou simular lembretes periódicos para encaminhamentos não agendados e lembretes antes do atendimento, com interrupção quando não forem mais aplicáveis.
+- **RF-07:** Permitir simular/disparar manualmente lembretes na demonstração, sem mensageria complexa.
+- **RF-08:** Permitir ao profissional confirmar comparecimento ou ausência.
+- **RF-09:** Quando `necessitaRetorno=true`, criar pendência de retorno vinculada e bloqueada até exame realizado e liberação profissional; depois oferecer agendamento e acompanhamento.
+- **RF-10:** Quando `necessitaRetorno=false`, encerrar o encaminhamento após confirmação profissional da realização do exame.
+- **RF-11:** Registrar solicitação de assistência humana e exibi-la como pendência.
+- **RF-12:** Disponibilizar chat demonstrativo se WhatsApp não estiver operacional.
+
+## 5. Regras de negócio
 
 - **RN-01:** Todo encaminhamento pertence a um paciente e a um procedimento.
-- **RN-02:** Somente horários cadastrados e disponíveis podem ser reservados.
-- **RN-03:** Um horário de capacidade unitária não pode ter mais de uma reserva ativa. Revalidar a disponibilidade em transação no backend.
-- **RN-04:** Encaminhamentos ainda não agendados podem gerar lembretes a cada 15 dias, respeitando consentimento e regras do canal.
-- **RN-05:** Agendamentos podem gerar lembretes 7 dias e 1 dia antes, apenas se essas datas estiverem no futuro.
-- **RN-06:** Lembretes deixam de ser aplicáveis após conclusão, cancelamento ou mudança de etapa.
-- **RN-07:** Ausência ao exame permite reagendar **somente o exame**.
-- **RN-08:** Ausência ao retorno permite reagendar **somente a consulta de retorno**.
-- **RN-09:** Retorno vinculado a exame começa bloqueado para agendamento e só é liberado após confirmação de realização do exame e autorização do profissional.
-- **RN-10:** Somente profissional de saúde confirma oficialmente comparecimento ou ausência.
-- **RN-11:** A IA não pode inventar horários, confirmar reservas sem resposta do backend ou oferecer recomendações clínicas.
-- **RN-12:** Se não houver vagas ou o paciente pedir ajuda, registrar necessidade de assistência humana.
-- **RN-13:** Mensagens proativas exigem autorização do paciente e respeito às regras do provedor de WhatsApp.
-- **RN-14:** Um exame concluído não conclui automaticamente seu retorno associado.
-- **RN-15:** A confirmação de reserva é ação transacional da aplicação, não do modelo de IA.
+- **RN-02:** Horários são fictícios, definidos no backend e diferentes conforme o procedimento; somente opções oferecidas e ainda válidas podem ser escolhidas.
+- **RN-03:** A confirmação da reserva é feita pelo backend após validação e persistência transacional, nunca pela IA.
+- **RN-04:** Um mesmo encaminhamento não pode ter duas reservas ativas. Persistência e restrições devem evitar duplicidade.
+- **RN-05:** Encaminhamentos liberados sem agendamento podem receber lembretes a cada 15 dias, respeitando consentimento e regras do canal.
+- **RN-06:** Agendamentos podem receber lembretes 7 dias e 1 dia antes, se essas datas estiverem no futuro.
+- **RN-07:** Interromper lembretes após conclusão, cancelamento, mudança de etapa ou quando atendimento humano tornar o lembrete inaplicável.
+- **RN-08:** Ausência ao exame permite reagendar somente o exame.
+- **RN-09:** Ausência ao retorno permite reagendar somente o retorno; não reiniciar o exame já realizado.
+- **RN-10:** O retorno começa aguardando pré-requisito e só é liberado após realização do exame confirmada pelo profissional e liberação profissional.
+- **RN-11:** Somente profissional confirma comparecimento/ausência e realização do exame. Mensagens do paciente ou IA não concluem etapa clínica.
+- **RN-12:** Exame concluído não conclui automaticamente o retorno associado.
+- **RN-13:** Se não houver opções ou o paciente pedir ajuda, registrar necessidade de assistência humana.
+- **RN-14:** Mensagens proativas exigem autorização do paciente e respeito às regras do provedor.
+- **RN-15:** Utilizar somente dados fictícios; não registrar segredos ou dados sensíveis em logs.
 
-## 7. Estados de encaminhamento
+## 6. Situações
 
-- `WAITING_PREREQUISITE`: aguarda etapa anterior, especialmente exame antes do retorno.
-- `PENDING_SCHEDULING`: encaminhamento liberado e ainda sem reserva.
-- `SCHEDULED`: existe agendamento confirmado.
-- `COMPLETED`: atendimento realizado e confirmado pelo profissional.
-- `NEEDS_RESCHEDULE`: houve falta ou perda de reserva; deve voltar ao agendamento.
-- `NEEDS_ASSISTANCE`: exige intervenção da equipe.
-- `CANCELLED`: cancelado.
+Valores em português brasileiro:
 
-O retorno começa em `WAITING_PREREQUISITE`. A realização do exame não o conclui automaticamente.
+- `AGUARDANDO_PRE_REQUISITO`: etapa bloqueada, como retorno antes da realização do exame e liberação profissional.
+- `PENDENTE_AGENDAMENTO`: etapa liberada sem agendamento.
+- `AGENDADO`: existe agendamento confirmado pelo backend.
+- `CONCLUIDO`: atendimento realizado e confirmado pelo profissional.
+- `NECESSITA_REAGENDAMENTO`: houve ausência; reagendar o mesmo procedimento desta etapa.
+- `NECESSITA_ASSISTENCIA`: requer intervenção humana.
+- `CANCELADO`: encaminhamento cancelado.
 
-## 8. Entidades principais
+## 7. Modelo conceitual
 
-- **Patient:** `id`, `name`, `phone`, `contactOptIn`.
-- **Unit:** `id`, `name`.
-- **Procedure:** `id`, `name`, `type` (`EXAM` ou `CONSULTATION`).
-- **Slot:** `id`, `unitId`, `procedureId`, `startAt`, `status`.
-- **Referral:** `id`, `patientId`, `procedureId`, `status`, `parentReferralId`, `createdAt`.
-- **Appointment:** `id`, `referralId`, `slotId`, `status`.
-- **Notification:** `id`, `referralId`, `type`, `scheduledAt`, `sentAt`.
+- **Paciente:** `id`, `nome`, `telefone`, `autorizouContato`.
+- **Procedimento:** `id`, `nome`, `tipo` (`EXAME` ou `CONSULTA`). Exemplos fictícios: hemograma, ultrassonografia e consulta de retorno.
+- **Encaminhamento:** `id`, `pacienteId`, `procedimentoId`, `necessitaRetorno`, `encaminhamentoOrigemId` (nulo para origem), `situacao`, `dataCriacao`.
+- **Agendamento:** `id`, `encaminhamentoId`, `dataHora`, `nomeUnidade` (fictício), `situacao`.
 
-Nomes e atributos adicionais podem ser definidos durante a implementação, desde que preservem as regras e os contratos acordados entre frontend e backend.
+Opções de horário podem residir em configuração simples do backend; não criar tabelas de agenda, vagas ou unidade para administrá-las. A modelagem relacional deve manter integridade referencial e permitir histórico suficiente para os fluxos. Adicionar atributos/entidades somente se necessários. Persistir o esquema no MySQL com migrations Flyway versionadas.
 
-## 9. Telas do MVP
+## 8. Persistência e configuração
 
-1. Dashboard de acompanhamento.
-2. Lista de pacientes e encaminhamentos.
-3. Formulário de novo encaminhamento.
-4. Agenda e disponibilidade de horários.
-5. Chat demonstrativo de contingência, caso o WhatsApp não esteja operacional.
+- Banco oficial: MySQL 8.0+; não usar H2 como banco do MVP.
+- Conexão por `DB_URL`, `DB_USERNAME` e `DB_PASSWORD`.
+- Flyway é a única ferramenta de criação/alteração do esquema; migrations em `src/main/resources/db/migration/` (`V1__...sql`, `V2__...sql`). Não editar migration já aplicada em ambiente compartilhado.
+- Hibernate usa `spring.jpa.hibernate.ddl-auto=validate`; não usar `update`, `create` ou `create-drop`.
+- Agendamentos e estados devem sobreviver à reinicialização da aplicação.
+- Dados de demonstração, se necessários, devem ter carregamento simples e reproduzível, separado das migrations obrigatórias e usando apenas dados sintéticos.
+
+## 9. Interfaces previstas
+
+1. Painel de acompanhamento de pendências e assistência humana.
+2. Lista/formulário simples de pacientes e encaminhamentos.
+3. Chat demonstrativo para o fluxo do paciente.
+
+Não criar interface administrativa para gerenciar unidades, agendas ou vagas.
 
 ## 10. Critérios de aceite
 
-- **CA-01:** O profissional cria um encaminhamento e vê a pendência no dashboard.
-- **CA-02:** O paciente recebe a mensagem ou a visualiza no chat demonstrativo.
-- **CA-03:** O paciente escolhe um horário e a aplicação registra a reserva.
-- **CA-04:** Uma vaga de capacidade unitária reservada deixa de ser ofertada.
-- **CA-05:** O sistema demonstra lembretes associados ao agendamento.
-- **CA-06:** O profissional confirma a realização do exame.
-- **CA-07:** O profissional libera o retorno, sem exigir outro exame.
-- **CA-08:** O paciente agenda o retorno.
-- **CA-09:** O profissional confirma o retorno e conclui o ciclo.
-- **CA-10:** Um pedido de ajuda aparece como pendência para a equipe.
-- **CA-11:** Ao reiniciar a aplicação, agendamentos e estados persistidos continuam disponíveis no MySQL.
+- **CA-01:** Profissional registra encaminhamento e vê pendência.
+- **CA-02:** Contato é enviado/simulado somente conforme autorização.
+- **CA-03:** Backend oferece opções fictícias por procedimento e registra a opção escolhida no MySQL.
+- **CA-04:** Opção reservada não pode ser reservada novamente para o mesmo encaminhamento; seleção inválida é recusada.
+- **CA-05:** Lembretes podem ser demonstrados e cessam quando deixam de ser aplicáveis.
+- **CA-06:** Profissional confirma realização/ausência do exame.
+- **CA-07:** Com retorno solicitado, retorno vinculado aguarda realização e liberação profissional.
+- **CA-08:** Paciente agenda retorno liberado.
+- **CA-09:** Ausência ao retorno permite remarcar apenas o retorno; exame não é reiniciado.
+- **CA-10:** Sem retorno solicitado, exame confirmado encerra o encaminhamento.
+- **CA-11:** Confirmação de retorno conclui o ciclo.
+- **CA-12:** Pedido de ajuda aparece como pendência humana.
+- **CA-13:** Reiniciar aplicação mantém agendamentos e situações no MySQL.
 
 ## 11. Fora do escopo
 
-- Prontuário eletrônico completo.
-- Diagnóstico, prescrição ou interpretação clínica de exames.
-- Integrações reais com SUS/SISREG ou agendas externas.
-- Convênios, faturamento e pagamentos.
-- Autenticação e autorização completas (MVP com dados sintéticos, não adequado a produção).
-- Agendamento em instituições sem agenda integrada.
-- Processamento de resultados laboratoriais.
-- RAG, agentes autônomos complexos e arquitetura de microsserviços.
+- Gestão completa de agendas ou disponibilidade real.
+- CRUD de unidades, capacidade avançada e administração de vagas.
+- Integrações com sistemas hospitalares, SUS ou SISREG.
+- Integração WhatsApp obrigatória ou infraestrutura complexa de mensageria.
+- Prontuário completo, diagnóstico, prescrição ou interpretação clínica de exames.
+- Convênios, faturamento, pagamentos, autenticação/autorização completas.
+- Integrações reais com laboratórios ou processamento de resultados.
+- Microsserviços, agentes autônomos complexos e áudio obrigatório.
 
-## 12. Restrições técnicas e de demonstração
+## 12. Restrições técnicas
 
-- Usar exclusivamente dados **fictícios/sintéticos**.
-- Backend em **Java 21 + Spring Boot**.
-- Frontend em **React + TypeScript**.
-- Banco obrigatório: **MySQL 8.0+** (não usar H2 no MVP).
-- Persistência de entidades e mudanças de estado com **Spring Data JPA / Hibernate**.
-- Credenciais apenas em variáveis de ambiente; nunca no repositório.
-- Garantir integridade referencial e transações para reserva de horários.
-- Oferecer uma demonstração funcional sem dependência obrigatória do WhatsApp real.
-- Priorizar uma jornada completa ponta a ponta.
-- Identificar como simuladas todas as integrações, notificações e disponibilidades que não forem reais.
+- Backend Java 21 + Spring Boot; frontend React + TypeScript.
+- Spring Data JPA/Hibernate e JUnit; persistência em MySQL 8.0+.
+- Credenciais somente por variáveis de ambiente.
+- Usar dados sintéticos e identificar como simuladas disponibilidades e integrações não reais.
+- Priorizar fluxo completo de continuidade do cuidado.
