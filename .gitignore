@@ -1,0 +1,8 @@
+/backend/target/
+/front-end/node_modules/
+/front-end/.next/
+/front-end/*.tsbuildinfo
+/front-end/test-results/
+/front-end/playwright-report/
+.env
+.env.local

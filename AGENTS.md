@@ -10,7 +10,7 @@ Antes de implementar funcionalidades, leia [`docs/SPEC.md`](docs/SPEC.md) e [`do
 
 ## 3. Stack e persistência
 
-- Backend: Java 21, Spring Boot, Spring Web, Spring Data JPA/Hibernate e JUnit.
+- Backend: Java 17, Spring Boot, Spring Web, Spring Data JPA/Hibernate e JUnit.
 - Banco oficial: **MySQL 8.0+**, com MySQL Connector/J. Não usar H2 como banco do MVP.
 - Evolução do esquema: **Flyway** em `src/main/resources/db/migration/`.
 - Usar português brasileiro para entidades, atributos, estados, regras e módulos de domínio, preservando nomes técnicos exigidos por Java/Spring.
